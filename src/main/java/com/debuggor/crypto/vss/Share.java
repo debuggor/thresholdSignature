@@ -42,7 +42,6 @@ public class Share {
         return share;
     }
 
-
     public boolean verify(int threshold, ECPoint[] vs) {
         if (this.threshold != threshold || vs.length == 0) {
             return false;

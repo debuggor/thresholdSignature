@@ -70,7 +70,7 @@ public class FeldmanVss {
 
     public static BigInteger evaluatePolynomial(int threshold, BigInteger[] v, BigInteger id) {
         BigInteger q = ECKey.CURVE.getN();
-        BigInteger result = BigInteger.ZERO;
+        BigInteger result = v[0];
         BigInteger X = BigInteger.ONE;
         for (int i = 1; i <= threshold; i++) {
             BigInteger ai = v[i];
@@ -99,4 +99,34 @@ public class FeldmanVss {
         return v;
     }
 
+    public static BigInteger reConstruct(Share[] shares) {
+        if (shares != null && shares[0].getThreshold() > shares.length) {
+            throw new IllegalArgumentException("shares number less than threshold number");
+        }
+        BigInteger q = ECKey.CURVE.getN();
+
+        BigInteger[] xs = new BigInteger[shares.length];
+        for (int i = 0; i < shares.length; i++) {
+            Share share = shares[i];
+            xs[i] = share.getId();
+        }
+
+        BigInteger secret = BigInteger.ZERO;
+        for (int i = 0; i < shares.length; i++) {
+            Share share = shares[i];
+            BigInteger times = BigInteger.ONE;
+            for (int j = 0; j < xs.length; j++) {
+                if (j == i) {
+                    continue;
+                }
+                BigInteger sub = xs[j].subtract(share.getId()).mod(q);
+                BigInteger subInv = sub.modInverse(q);
+                BigInteger div = xs[j].multiply(subInv).mod(q);
+                times = times.multiply(div).mod(q);
+            }
+            BigInteger fTimes = share.getShare().multiply(times);
+            secret = secret.add(fTimes).mod(q);
+        }
+        return secret;
+    }
 }

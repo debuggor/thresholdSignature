@@ -2,6 +2,7 @@ package com.debuggor;
 
 import com.debuggor.crypto.vss.FeldmanVss;
 import com.debuggor.crypto.vss.Share;
+import org.bitcoinj.core.ECKey;
 import org.junit.Test;
 import org.spongycastle.math.ec.ECPoint;
 
@@ -20,14 +21,12 @@ public class FeldmanTest {
         int threshold = 3;
 
         SecureRandom random = new SecureRandom();
-        // BigInteger secret = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
-        BigInteger secret = BigInteger.valueOf(10);
+        BigInteger secret = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
 
         BigInteger[] ids = new BigInteger[num];
         for (int i = 0; i < num; i++) {
             random = new SecureRandom();
-            //  ids[i] = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
-            ids[i] = BigInteger.valueOf(i + 1);
+            ids[i] = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
         }
 
         FeldmanVss feldmanVss = FeldmanVss.create(threshold, secret, ids);
@@ -40,7 +39,31 @@ public class FeldmanTest {
         }
     }
 
+    /**
+     * 恢复secret
+     */
+    @Test
+    public void reconstructTest() {
+        int num = 5;
+        int threshold = 3;
 
+        SecureRandom random = new SecureRandom();
+        BigInteger secret = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
 
+        BigInteger[] ids = new BigInteger[num];
+        for (int i = 0; i < num; i++) {
+            random = new SecureRandom();
+            ids[i] = BigInteger.probablePrime(ECKey.CURVE.getN().bitLength(), random);
+        }
+
+        FeldmanVss feldmanVss = FeldmanVss.create(threshold, secret, ids);
+        Share[] shares = feldmanVss.getShares();
+
+        Share[] ss = new Share[threshold + 1];
+        System.arraycopy(shares, 0, ss, 0, threshold + 1);
+        BigInteger secret1 = FeldmanVss.reConstruct(ss);
+
+        System.out.println(secret.equals(secret1));
+    }
 
 }
