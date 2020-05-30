@@ -1,9 +1,9 @@
 package com.debuggor;
 
-import com.debuggor.paillier.KeyPairBuilder;
-import com.debuggor.paillier.Paillier;
-import com.debuggor.paillier.PrivateKey;
-import com.debuggor.paillier.PublicKey;
+import com.debuggor.crypto.paillier.KeyPairBuilder;
+import com.debuggor.crypto.paillier.Paillier;
+import com.debuggor.crypto.paillier.PrivateKey;
+import com.debuggor.crypto.paillier.PublicKey;
 import org.junit.Test;
 
 import java.math.BigInteger;

@@ -1,4 +1,4 @@
-package com.debuggor.paillier;
+package com.debuggor.crypto.paillier;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

@@ -1,4 +1,4 @@
-package com.debuggor.paillier;
+package com.debuggor.crypto.paillier;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -12,7 +12,6 @@ public class PublicKey {
     private BigInteger N;
 
     private static int bits = 2048;
-
 
     public PublicKey(BigInteger n) {
         N = n;

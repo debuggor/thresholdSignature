@@ -1,4 +1,4 @@
-package com.debuggor.paillier;
+package com.debuggor.crypto.paillier;
 
 /**
  * @Author:yong.huang
