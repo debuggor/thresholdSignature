@@ -1,5 +1,7 @@
 package com.debuggor.crypto.paillier;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -21,8 +23,10 @@ public class PublicKey {
         return N;
     }
 
-    public void setN(BigInteger n) {
-        N = n;
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("N", this.getN());
+        return object;
     }
 
     public BigInteger encrypt(BigInteger m) {

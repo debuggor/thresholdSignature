@@ -1,5 +1,7 @@
 package com.debuggor.crypto.paillier;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.math.BigInteger;
 
 /**
@@ -24,26 +26,21 @@ public class PrivateKey {
         return publicKey;
     }
 
-    public void setPublicKey(PublicKey publicKey) {
-        this.publicKey = publicKey;
-    }
-
     public BigInteger getLambdaN() {
         return lambdaN;
-    }
-
-    public void setLambdaN(BigInteger lambdaN) {
-        this.lambdaN = lambdaN;
     }
 
     public BigInteger getPhiN() {
         return phiN;
     }
 
-    public void setPhiN(BigInteger phiN) {
-        this.phiN = phiN;
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("N", publicKey.getN());
+        object.put("LambdaN", lambdaN);
+        object.put("PhiN", phiN);
+        return object;
     }
-
 
     /**
      * func (privateKey *PrivateKey) Decrypt(c *big.Int) (m *big.Int, err error) {
