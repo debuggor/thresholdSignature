@@ -10,6 +10,7 @@ import com.debuggor.crypto.vss.FeldmanVss;
 import com.debuggor.crypto.vss.Share;
 import org.bitcoinj.core.ECKey;
 import org.spongycastle.math.ec.ECPoint;
+import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -76,10 +77,10 @@ public class KeyGen {
                 z = z.multiply(idi).mod(q);
                 BigXj = BigXj.add(Vc[j].multiply(z));
             }
-            bigXj[i] = BigXj;
+            bigXj[i] = ECKey.compressPoint(BigXj);
         }
         // 公钥
-        ECPoint ecdsaPubKey = Vc[0];
+        ECPoint ecdsaPubKey = ECKey.compressPoint(Vc[0]);
 
         // 计算xi  (i,xi)曲线上的一点
         BigInteger[] Xis = new BigInteger[n];
@@ -118,6 +119,13 @@ public class KeyGen {
 
             ReadWriteJson.writeJsonFile(filePath, object.toString());
         }
+
+        BigInteger pri = BigInteger.ZERO;
+        for (int i = 0; i < n; i++) {
+            pri = pri.add(uis[i]).mod(q);
+        }
+        System.out.println("私钥：" + pri.toString(16));
+        System.out.println("公钥：" + Hex.toHexString(ecdsaPubKey.getEncoded(true)));
     }
 
     public static void main(String[] args) {
