@@ -85,16 +85,14 @@ public class KeyGen {
         // 计算xi  (i,xi)曲线上的一点
         BigInteger[] Xis = new BigInteger[n];
         for (int i = 0; i < n; i++) {
+            Xis[i] = BigInteger.ZERO;
+        }
+        for (int i = 0; i < n; i++) {
             Share[] sharei = shares[i];
-            BigInteger xi = sharei[i].getShare();
             for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    continue;
-                }
                 Share sharej = sharei[j];
-                xi = xi.add(sharej.getShare());
+                Xis[j] = Xis[j].add(sharej.getShare());
             }
-            Xis[i] = xi.mod(q);
         }
 
 
@@ -107,7 +105,7 @@ public class KeyGen {
         }
         // 各个参与者保存信息
         for (int i = 0; i < n; i++) {
-            String filePath = "test/test02/ecdsa_data_" + i + ".json";
+            String filePath = "test/test01/ecdsa_data_" + i + ".json";
             JSONObject object = new JSONObject();
             object.put("PaillierSK", pailliers[i].getPrivateKey().toJson());
             object.put("ShareID", ids[i]);
