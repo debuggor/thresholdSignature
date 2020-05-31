@@ -147,7 +147,8 @@ public class Signing {
             R = R.add(PointGamma[i]);
         }
         R = R.multiply(thetaInverse);
-        BigInteger rx = R.getXCoord().toBigInteger().mod(q);
+        R = ECKey.compressPoint(R);
+        BigInteger rx = R.getAffineXCoord().toBigInteger().mod(q);
 
         // 每个参与者签名
         BigInteger[] Signaturei = new BigInteger[threshold + 1];
@@ -224,16 +225,14 @@ public class Signing {
          * 私钥：a449b5df71dd21b07370a848b66b85137b31b46c43645dd8ad3a5b48b4a3fac0
          * 公钥：02b7844b6be8d0c0d86a1c0dbcaa7dec428ba9ae83aca993b3f37c13f02a80e128
          *
-         * 签名结果s: ee2582c798888dde0a48eb730669121f2c5d4355cf7ded288cf3d209f37d0cac
-         * 签名结果r: 5b9714e0e3c03bee48c5b238551b95934fd6a781bb9bc27e783e6fb5ca646595
+         * 签名结果s: 17c2fc0735d2c3addae0a3d74c909e8e1cd64d981462a474e0e1c7aa62fc23b9
+         * 签名结果r: c1091c52da4baa91c90e71d18231c15e57ec8bd9d06edb59db3fa5910c3d9fc3
          */
         BigInteger pri = new BigInteger("a449b5df71dd21b07370a848b66b85137b31b46c43645dd8ad3a5b48b4a3fac0", 16);
         ECKey ecKey = ECKey.fromPrivate(pri);
-        System.out.println(ecKey.getPublicKeyAsHex());
-        System.out.println(ecKey.getPrivateKeyAsHex());
 
-        BigInteger r = new BigInteger("ee2582c798888dde0a48eb730669121f2c5d4355cf7ded288cf3d209f37d0cac", 16);
-        BigInteger s = new BigInteger("5b9714e0e3c03bee48c5b238551b95934fd6a781bb9bc27e783e6fb5ca646595", 16);
+        BigInteger s = new BigInteger("17c2fc0735d2c3addae0a3d74c909e8e1cd64d981462a474e0e1c7aa62fc23b9", 16);
+        BigInteger r = new BigInteger("c1091c52da4baa91c90e71d18231c15e57ec8bd9d06edb59db3fa5910c3d9fc3", 16);
         ECKey.ECDSASignature sign = new ECKey.ECDSASignature(r, s);
         boolean verify = ecKey.verify(sha256Hash, sign);
         System.out.println(verify);
